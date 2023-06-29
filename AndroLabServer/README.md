@@ -1,16 +1,17 @@
 AndroLab Back-end Server README
 ==========
 
-This project is the python backend server for the Android InsecureBankv2 application which can be found at https://github.com/dineshshetty/Android-InsecureBankv2
+This project is the Python3 backend server for the Android InsecureBankv2 application which can be found at https://github.com/dineshshetty/Android-InsecureBankv2
 
 
-This is an insecure bank application implemented in Python 3. It consists of three files:
+This is an insecure bank application implemented in Python3. It consists of four main files:
 
 1. `database.py`: This file contains the database setup code using SQLAlchemy to establish a connection to the SQLite database.
 
 2. `models.py`: This file defines the data models for the users and accounts using SQLAlchemy's declarative base.
 
 3. `app.py`: This is the main application file that contains the Flask web server implementation for the bank application. It provides various routes for user authentication, account management, and transactions.
+4. `mydb.db`: This is the sample SQLite 3.X database with the two default accounts- dinesh and jack, to initialize the server database.
 
 ## Installation and Setup
 
