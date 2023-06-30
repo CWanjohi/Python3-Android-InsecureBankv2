@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: myapp
+    image: androlabserver
     volumes:
       - ./src:/app
     ports:
