@@ -1,4 +1,4 @@
-FROM python:3.11-slim as build
+FROM python:3.9.17-slim-bullseye
 
 RUN useradd -m adrserver
 WORKDIR /app
