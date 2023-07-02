@@ -84,3 +84,7 @@ You can access the Insecure Bank Application by opening a web browser and naviga
 
 **Note: This application is for educational purposes only and should not be used in a production environment. It is intentionally insecure and does not implement proper security measures. Use it at your own risk.**
 
+## TO-DO
+1. Configure logging of server HTTP responses [DONE]
+
+2. Use requirements.txt file to install Python packages in Dockerfile [DONE]

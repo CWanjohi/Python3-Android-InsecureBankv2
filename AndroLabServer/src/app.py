@@ -1,5 +1,6 @@
 import getopt
 import sys
+import logging
 from functools import wraps
 from flask import Flask, request, request_started
 import json
@@ -13,15 +14,20 @@ makejson = json.dumps
 
 DEFAULT_PORT_NO = 8888
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def usageguide():
-    print("InsecureBankv2 Backend-Server")
-    print("Options: ")
-    print("  --port p    serve on port p (default 8888)")
-    print("  --help      print this message")
+    logger.info("InsecureBankv2 Backend-Server")
+    logger.info("Options: ")
+    logger.info("  --port p     serve on port p (default 8888)")
+    logger.info("  --help       print this message")
+    logger.info("  --log        enable logging messages")
 
 @app.errorhandler(500)
 def internal_servererror(error):
-    print(" [!]", error)
+    logger.error(" [!]", error)
     return "Internal Server Error", 500
 
 @app.route('/login', methods=['POST'])
@@ -29,7 +35,7 @@ def login():
     Responsemsg = "fail"
     user = request.form['username']
     u = User.query.filter(User.username == request.form["username"]).first()
-    print("u=", u)
+    logger.info("u=%s", u)
     if u and u.password == request.form["password"]:
         Responsemsg = "Correct Credentials"
     elif u and u.password != request.form["password"]:
@@ -39,7 +45,7 @@ def login():
     else:
         Responsemsg = "Some Error"
     data = {"message": Responsemsg, "user": user}
-    print(makejson(data))
+    logger.info(makejson(data))
     return makejson(data)
 
 @app.route('/getaccounts', methods=['POST'])
@@ -60,7 +66,7 @@ def getaccounts():
             if i.type == 'to':
                 to_acc = i.account_number
     data = {"message": Responsemsg, "from": from_acc, "to": to_acc}
-    print(makejson(data))
+    logger.info(makejson(data))
     return makejson(data)
 
 @app.route('/changepassword', methods=['POST'])
@@ -68,7 +74,7 @@ def changepassword():
     Responsemsg = "fail"
     newpassword = request.form['newpassword']
     user = request.form['username']
-    print(newpassword)
+    logger.info(newpassword)
     u = User.query.filter(User.username == user).first()
     if not u:
         Responsemsg = "Error"
@@ -77,7 +83,7 @@ def changepassword():
         u.password = newpassword
         db_session.commit()
     data = {"message": Responsemsg}
-    print(makejson(data))
+    logger.info(makejson(data))
     return makejson(data)
 
 @app.route('/dotransfer', methods=['POST'])
@@ -99,6 +105,7 @@ def dotransfer():
         from_account.balance -= int(request.form['amount'])
         db_session.commit()
     data = {"message": Responsemsg, "from": from_acc, "to": to_acc, "amount": amount}
+    logger.info(makejson(data))
     return makejson(data)
 
 @app.route('/devlogin', methods=['POST'])
@@ -106,23 +113,29 @@ def devlogin():
     user = request.form['username']
     Responsemsg = "Correct Credentials"
     data = {"message": Responsemsg, "user": user}
-    print(makejson(data))
+    logger.info(makejson(data))
     return makejson(data)
 
 if __name__ == '__main__':
     port = DEFAULT_PORT_NO
-    options, args = getopt.getopt(sys.argv[1:], "", ["help", "port="])
+    enable_logging = False
+
+    options, args = getopt.getopt(sys.argv[1:], "", ["help", "port=", "log"])
     for op, arg1 in options:
         if op == "--help":
             usageguide()
             sys.exit(2)
         elif op == "--port":
             port = int(arg1)
+        elif op == "--log":
+            enable_logging = True
 
-    print("The server is hosted on port:", port)
-    serve(app, host='0.0.0.0', port=port)
+    if enable_logging:
+        logging.basicConfig(level=logging.INFO)
+
+    logger.info("The server is hosted on port: %s", port)
+
     try:
-        server.start()
-        #apps.run(port)
-    except KeyboardInterrupt:
-        server.stop()
+        serve(app, host='0.0.0.0', port=port)
+    except Exception as e:
+        logger.exception("An error occurred while running the server: %s", str(e))
