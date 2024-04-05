@@ -47,9 +47,8 @@ If you are too impatient to use the application or read the usage guide then fol
 
 1) Download and install latest apk file
 
-2) Make sure that the AndroLab server is running
+2) Make sure that the AndroLab server is running- Within the AndroLabServer directory, build Docker image and run it or run using the docker-compose file.
 
-3) Make sure Is machine-machine access allowed on your network. Firewall disabled. Open netcat on your machine and then adb into your emulator. Try to connect to the address from adb and see if you can reach the machine. If you can not - fix the network issue before trying. I can not help you fix your network issues sadly so please there is no point creating git issues for it. 
+3) Make sure that machine-machine access is allowed on your network (AndroLab server and the phone/emulator with the application need to communicate with each other). Firewall disabled. Open netcat on your machine and then adb into your emulator. Try to connect to the address from adb and see if you can reach the machine. If you can not - fix the network issue before trying. I can not help you fix your network issues sadly so please there is no point creating git issues for it. 
 
 4) Use the credentials dinesh/Dinesh@123$ or jack/Jack@123$ and start using the application
-
